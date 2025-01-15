@@ -68,6 +68,5 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'Kids-Compass-frontend-Linux'
-          slot-name: 'Production'
           package: ./release.zip
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_45BD6C835AB5448EB5941AA7905E6F1A }}
