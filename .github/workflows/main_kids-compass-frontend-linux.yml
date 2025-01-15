@@ -38,11 +38,13 @@ jobs:
          cp -r ./public ./deploy
          cp -r ./.next/static/. ./deploy/.next/static
 
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
 
   #追加：パッケージングでZIPファイルを作成
-      - name: Create ZIP for deployment
-        run: |
-          zip -r release.zip ./deploy
+      #- name: Create ZIP for deployment
+       #  run: |
+       #  zip -r release.zip ./deploy
               
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -55,7 +57,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      #url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     
     steps:
       - name: Download artifact from build job
