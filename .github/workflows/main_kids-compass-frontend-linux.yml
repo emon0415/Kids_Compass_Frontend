@@ -37,6 +37,9 @@ jobs:
           cp -r ./.next/standalone/. ./deploy
           cp -r ./public ./deploy
           cp -r ./.next/static/. ./deploy/.next/static
+          echo "PORT=8080" > ./deploy/.env # Azure用ポート設定
+
+          
       - name: Zip artifact for deployment
         run: zip release.zip ./* -r
 
@@ -63,6 +66,9 @@ jobs:
       - name: Unzip artifact for deployment
         run: unzip release.zip
 
+      - name: Debug artifact contents
+        run: ls -R deploy # 配置されたファイルの構造を確認
+
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
@@ -71,3 +77,8 @@ jobs:
           slot-name: 'Production'
           package: ./deploy
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE }}
+
+      - name: Log deployment output
+        run: |
+          curl -X GET https://${{ secrets.AZUREAPPSERVICE_URL }}/api/health || echo "Health check failed"
+
